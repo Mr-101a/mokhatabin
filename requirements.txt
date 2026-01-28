@@ -1,2 +1,9 @@
 python-telegram-bot==20.7
-python-dotenv
+python-dotenv==1.0.0
+psycopg2-binary==2.9.9  # اگر از دیتابیس استفاده می‌کنید
+requests==2.31.0
+aiohttp==3.9.1  # برای API calls async
+sqlalchemy==2.0.23  # اگر ORM می‌خواهید
+gunicorn==21.2.0  # برای production
+flask==3.0.0  # اگر API endpoint اضافه می‌کنید
+redis==5.0.1  # برای کش (اختیاری)
