@@ -1,9 +1,6 @@
-python-telegram-bot[job-queue]==20.9
+# requirements.txt
+python-telegram-bot==20.9
+flask==3.0.0
 python-dotenv==1.0.0
-# psycopg2-binary==2.9.9  # فعلاً کامنت کنید تا مشکل نداشته باشد
+jdatetime==4.1.1
 requests==2.31.0
-# aiohttp==3.9.1  # فعلاً کامنت کنید
-# sqlalchemy==2.0.23  # فعلاً کامنت کنید
-# gunicorn==21.2.0
-# flask==3.0.0
-# redis==5.0.1
