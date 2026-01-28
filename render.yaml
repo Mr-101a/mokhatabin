@@ -1,50 +1,46 @@
 services:
   - type: web
-    name: telegram-contact-bot
+    name: telegram-bot-simple
     env: python
-    region: frankfurt  # یا singapore برای سرعت بهتر به ایران
-    plan: free  # برای شروع رایگان
+    region: frankfurt
+    plan: free
+    branch: main
     
-    # 🔧 کامندهای بیلد (Build Commands)
+    # کامندهای بیلد
     buildCommand: |
+      python --version
       pip install --upgrade pip
       pip install -r requirements.txt
-      echo "✅ Build completed successfully"
+      echo "✅ Dependencies installed successfully"
     
-    # 🚀 کامند استارت (Start Command)
-    startCommand: |
-      python bot.py
-      # یا اگر از gunicorn استفاده می‌کنید:
-      # gunicorn bot:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120
+    # کامند استارت
+    startCommand: python main.py
     
-    # 📁 ساختار دایرکتوری
-    rootDir: .  # اگر کدها در روت هستند
-    
-    # 🔐 متغیرهای محیطی
+    # متغیرهای محیطی ضروری
     envVars:
       - key: TELEGRAM_BOT_TOKEN
         sync: false
+        required: true
       - key: PORT
         value: 8443
+      - key: WEBHOOK_URL
+        sync: false
+        generateValue: true
       - key: PYTHON_VERSION
         value: 3.11.0
-      - key: WEBHOOK_URL
-        sync: false  # بعد از دپلوی تنظیم می‌شود
-      - key: DATABASE_URL  # اگر دیتابیس دارید
-        sync: false
-      - key: IRAN_API_URL  # اگر به API ایران وصل می‌شوید
-        value: https://your-iranian-api.com
-      - key: IRAN_API_KEY
-        sync: false
     
-    # ⚙️ تنظیمات پیشرفته
-    autoDeploy: true  # با هر push اتوماتیک آپدیت شود
+    # تنظیمات پیشرفته
+    autoDeploy: true
     healthCheckPath: /health
-    numInstances: 1
+    healthCheckTimeout: 30
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
     
-    # 🗄️ اگر دیتابیس نیاز دارید (اختیاری)
-    # databases:
-    #   - name: telegrambotdb
-    #     databaseName: telegram_bot
-    #     user: telegram_user
-    #     plan: free
+    # اگر نیاز به Buildpack دارید
+    # buildFilter:
+    #   paths:
+    #     - "requirements.txt"
+    #     - "runtime.txt"
+    #     - "main.py"
