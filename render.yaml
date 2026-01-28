@@ -1,13 +1,50 @@
 services:
   - type: web
-    name: telegram-bot
+    name: telegram-contact-bot
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
+    region: frankfurt  # یا singapore برای سرعت بهتر به ایران
+    plan: free  # برای شروع رایگان
+    
+    # 🔧 کامندهای بیلد (Build Commands)
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      echo "✅ Build completed successfully"
+    
+    # 🚀 کامند استارت (Start Command)
+    startCommand: |
+      python bot.py
+      # یا اگر از gunicorn استفاده می‌کنید:
+      # gunicorn bot:app --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120
+    
+    # 📁 ساختار دایرکتوری
+    rootDir: .  # اگر کدها در روت هستند
+    
+    # 🔐 متغیرهای محیطی
     envVars:
       - key: TELEGRAM_BOT_TOKEN
         sync: false
-      - key: WEBHOOK_URL
-        sync: false
       - key: PORT
         value: 8443
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: WEBHOOK_URL
+        sync: false  # بعد از دپلوی تنظیم می‌شود
+      - key: DATABASE_URL  # اگر دیتابیس دارید
+        sync: false
+      - key: IRAN_API_URL  # اگر به API ایران وصل می‌شوید
+        value: https://your-iranian-api.com
+      - key: IRAN_API_KEY
+        sync: false
+    
+    # ⚙️ تنظیمات پیشرفته
+    autoDeploy: true  # با هر push اتوماتیک آپدیت شود
+    healthCheckPath: /health
+    numInstances: 1
+    
+    # 🗄️ اگر دیتابیس نیاز دارید (اختیاری)
+    # databases:
+    #   - name: telegrambotdb
+    #     databaseName: telegram_bot
+    #     user: telegram_user
+    #     plan: free
